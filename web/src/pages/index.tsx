@@ -1,18 +1,33 @@
-import { useUser } from '@auth0/nextjs-auth0';
+import { getSession,  } from '@auth0/nextjs-auth0';
+import { GetServerSideProps } from 'next';
 import React from 'react';
 
 const Home: React.FC = () => {
-  const { user } = useUser();
   
-  console.log(user);
+  
+  
 
-  return (
-    <div>
-      <h1>Hello world</h1>      
-
-      <a href="/api/auth/login">Login</a>
-    </div>
-  );
+  return null;
 }
 
 export default Home;
+
+export const getServerSideProps: GetServerSideProps = async ({req, res}) => {
+  const session = getSession(req, res);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/api/auth/login',
+        permanent: false
+      }
+    }
+  } else {
+    return {
+      redirect: {
+        destination: '/app',
+        permanent: false
+      }
+    }
+  }
+}
